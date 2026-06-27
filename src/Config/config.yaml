@@ -1,0 +1,19 @@
+RANDOM_STATE: 42
+
+drop_columns:
+  - "id"
+  - "pickup_datetime"
+  - "store_and_fwd_flag"
+  - "hour"
+  - "month"
+  - "day_of_week"
+
+polynomial:
+  degree: 2
+  include_bias: True
+
+scaling:
+  type: standard
+  # type: minmax
+  # type: robust
+  # type: maxabs
