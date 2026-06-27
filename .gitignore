@@ -2,8 +2,9 @@
 __pycache__/
 *.py[codz]
 *$py.class
-
-
+*.csv
+__pycache__/
+*.pyc
 
 
 # C extensions
