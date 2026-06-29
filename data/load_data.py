@@ -8,9 +8,9 @@ from development samples to optimize execution workflows.
 Pipeline Workflow & Implementations:
 ----------------------------------
 1. Directory Structure Navigation:
-   - Configures robust multi-level path resolution to smoothly access data directories 
-     from nested modules (e.g., handling cross-folder communication between 'src/data' 
-     and ingestion scripts).
+     - Configures robust multi-level path resolution to smoothly access data directories 
+         from nested modules (e.g., handling cross-folder communication between 'data/' 
+         and ingestion scripts).
 
 2. Data Ingestion & Dynamic Selection:
    - Provides functional switches to load either the full training/validation splits 
@@ -18,8 +18,8 @@ Pipeline Workflow & Implementations:
 
 3. Split Synchronization:
    - Manages the separation between:
-     * Full Tiers ('src/data/split/'): train.csv, val.csv, test.csv for final modeling.
-     * Sample Tiers ('src/data/split_sample/'): Lightened deterministic versions 
+         * Full Tiers ('data/split/'): train.csv, val.csv, test.csv for final modeling.
+         * Sample Tiers ('data/split_sample/'): Lightened deterministic versions 
        for fast iteration and iterative testing inside Jupyter Notebooks.
 """
 
