@@ -63,14 +63,16 @@ class Preprocessing_Pipeline():
             Feature.EUCLIDEAN_DIST.value,
         ]
 
-    def _clean_data(self, df: pd.DataFrame) -> pd.DataFrame:
+    def _clean_data(self, df: pd.DataFrame,train_mode: bool = True) -> pd.DataFrame:
         df_clean = df.copy()
         df_clean = df_clean[
             (df_clean[Feature.PICKUP_LATITUDE.value].between(40.5, 41.0)) &
             (df_clean[Feature.PICKUP_LONGITUDE.value].between(-74.25, -73.5))]
         
-        if Feature.TRIP_DURATION.value in df_clean.columns:
+        if (Feature.TRIP_DURATION.value in df_clean.columns) and train_mode:
             df_clean = df_clean[df_clean[Feature.TRIP_DURATION.value].between(60, 7000)]
+
+        if Feature.TRIP_DURATION.value in df_clean.columns:
             df_clean[Feature.TRIP_DURATION.value] = np.log1p(df_clean[Feature.TRIP_DURATION.value])
 
         return df_clean
@@ -122,34 +124,61 @@ class Preprocessing_Pipeline():
     def fit_transform(self, df: pd.DataFrame) -> pd.DataFrame:
         df_processed = df.copy()
 
-        df_processed = self._clean_data(df_processed)
+        df_processed = self._clean_data(df_processed, train_mode=True)
         df_processed = self._extract_geospatial_features(df_processed)
-        df_processed = self._extract_temporal_features(df_processed , train_mode=True)
-        df_processed = self.scaling(df_processed, train_mode=True)
+        df_processed = self._extract_temporal_features(df_processed, train_mode=True)
 
         cols_to_drop = config.get("drop_columns", [])
-        df_processed = df_processed.drop(columns=cols_to_drop , errors='ignore')
+        df_processed = df_processed.drop(columns=cols_to_drop, errors='ignore')
+
+        target_col = Feature.TRIP_DURATION.value
+        target_series = None
+        if target_col in df_processed.columns:
+            target_series = df_processed[target_col]
+            df_processed = df_processed.drop(columns=[target_col])
+
+        if config.get("use_polynomial", False):
+            df_processed = self.polynomial_feature(df_processed, train_mode=True)
+
+        if config.get("use_scaling", False):
+            df_processed = self.scaling(df_processed, train_mode=True)
+
+        if target_series is not None:
+            df_processed[target_col] = target_series
 
         return df_processed
 
     def transform(self, df: pd.DataFrame) -> pd.DataFrame:
         df_processed = df.copy()
 
-        df_processed = self._clean_data(df_processed)
+        df_processed = self._clean_data(df_processed, train_mode=False)
         df_processed = self._extract_geospatial_features(df_processed)
-        df_processed = self._extract_temporal_features(df_processed , train_mode=False)
-        df_processed = self.scaling(df_processed, train_mode=False)
+        df_processed = self._extract_temporal_features(df_processed, train_mode=False)
 
         cols_to_drop = config.get("drop_columns", [])
-        df_processed = df_processed.drop(columns=cols_to_drop , errors='ignore')
+        df_processed = df_processed.drop(columns=cols_to_drop, errors='ignore')
+
+        target_col = Feature.TRIP_DURATION.value
+        target_series = None
+        if target_col in df_processed.columns:
+            target_series = df_processed[target_col]
+            df_processed = df_processed.drop(columns=[target_col])
+
+        if config.get("use_polynomial", False):
+            df_processed = self.polynomial_feature(df_processed, train_mode=False)
+        
+        if config.get("use_scaling", False):
+            df_processed = self.scaling(df_processed, train_mode=False)
+
+        if target_series is not None:
+            df_processed[target_col] = target_series
 
         return df_processed
-    
 
-
-    def polonomial_feature(self, x, train_mode: bool = True):
+    def polynomial_feature(self, x, train_mode: bool = True):
         if train_mode:
             self.poly = PolynomialFeatures(degree=degree, include_bias=include_bias)
+            self.poly.set_output(transform="pandas")
             x_poly = self.poly.fit_transform(x)
         else:
             if self.poly is None:
@@ -207,3 +236,5 @@ if __name__ == "__main__":
 
     print("\nFinal Columns after Preprocessing:")
     print(list(train_processed.columns))
+
+    
