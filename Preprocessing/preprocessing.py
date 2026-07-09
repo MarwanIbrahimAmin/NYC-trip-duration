@@ -223,7 +223,7 @@ class Preprocessing_Pipeline():
 
     
 if __name__ == "__main__":
-    train_df, val_df, test_df = load_train_val_test(tier=DataTier.SAMPLE)
+    train_df, val_df, test_df = load_train_val_test(tier=DataTier.FULL)
     print(f"Raw Train Shape: {train_df.shape}")
 
     pipeline = Preprocessing_Pipeline()

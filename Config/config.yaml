@@ -1,7 +1,5 @@
 RANDOM_STATE: 42
 
-
-
 drop_columns:
   - "id"
   - "pickup_datetime"
@@ -10,18 +8,17 @@ drop_columns:
   - "month"
   - "day_of_week"
 
-use_polynomial: True
+use_polynomial: False
 polynomial:
-  degree: 3
+  degree: 2
   include_bias: False
 
 use_scaling: True
 scaling:
-  type: standard
+  # type: standard
   # type: minmax
-  # type: robust
+  type: robust
   # type: maxabs
-
 
 Model:
 
@@ -35,24 +32,25 @@ Model:
     positive: False
 
   XGBoost:
-    n_estimators: 200
-    max_depth: 4
-    learning_rate: 0.05
+    n_estimators: 600
+    max_depth: 7
+    learning_rate: 0.03
     subsample: 0.8
-    colsample_bytree: 0.8
-    reg_alpha: 0.1     
-    reg_lambda: 1.0   
+    colsample_bytree: 0.7
+    reg_alpha: 0.5
+    reg_lambda: 2.0   
     objective: 'reg:squarederror'
 
   NeuralNetwork:
-    hidden_layer_sizes: [64, 16]
+    hidden_layer_sizes: [128, 64, 32] 
     activation: 'relu'
     solver: 'adam'
-    alpha: 0.01
-    learning_rate_init: 0.001
-    max_iter: 1000
-    batch_size: 'auto'
+    alpha: 0.001
+    learning_rate_init: 0.002
+    max_iter: 500
+    batch_size: 256 
     early_stopping: True
+    n_iter_no_change: 15
 
   Lasso:
     fit_intercept: True
@@ -60,14 +58,16 @@ Model:
     positive: False
     max_iter: 2000
 
-  LightGBM:
-    n_estimators: 200
-    max_depth: 4
-    learning_rate: 0.05
+  LightGBM:         
+    n_estimators: 800
+    max_depth: 8
+    num_leaves: 63
+    learning_rate: 0.03
     subsample: 0.8
-    colsample_bytree: 0.8
-    reg_alpha: 0.1
-    reg_lambda: 1.0
+    colsample_bytree: 0.7
+    reg_alpha: 0.5
+    reg_lambda: 2.0
+    n_jobs: -1
     objective: 'regression'
 
 save_paths:
