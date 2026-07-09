@@ -40,7 +40,7 @@ class Train():
 
 if __name__ == '__main__':
     print("Preparing data...")
-    preparer = Preparing(tier=DataTier.SAMPLE)
+    preparer = Preparing(tier=DataTier.FULL)
     X_train, y_train, X_val, y_val, X_test, y_test = preparer.prepare_data()
 
     print(f"X_train shape: {X_train.shape} | y_train shape: {y_train.shape}")

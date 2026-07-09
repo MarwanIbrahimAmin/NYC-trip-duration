@@ -33,13 +33,13 @@ from Config.load import load_config as config
 from Enum.path_enums import DataTier, DataFile
 
 
-def get_data_path(tier: DataTier = DataTier.SAMPLE, filename: DataFile = DataFile.TRAIN) -> str:
+def get_data_path(tier: DataTier = DataTier.FULL, filename: DataFile = DataFile.TRAIN) -> str:
     base_dir = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(base_dir, tier.value, filename.value)
     return path
 
 
-def load_csv(tier: DataTier = DataTier.SAMPLE, filename: DataFile = DataFile.TRAIN) -> pd.DataFrame:
+def load_csv(tier: DataTier = DataTier.FULL, filename: DataFile = DataFile.TRAIN) -> pd.DataFrame:
     path = get_data_path(tier, filename)
     if not os.path.exists(path):
         raise FileNotFoundError(f"Error: The file {filename.value} does not exist in {tier.value} folder!")
@@ -48,7 +48,7 @@ def load_csv(tier: DataTier = DataTier.SAMPLE, filename: DataFile = DataFile.TRA
     return pd.read_csv(path)
 
 
-def load_train_val_test(tier: DataTier = DataTier.SAMPLE):
+def load_train_val_test(tier: DataTier = DataTier.FULL):
     train_df = load_csv(tier, DataFile.TRAIN)
     val_df = load_csv(tier, DataFile.VAL)
     test_df = load_csv(tier, DataFile.TEST)
@@ -57,5 +57,5 @@ def load_train_val_test(tier: DataTier = DataTier.SAMPLE):
 
 
 if __name__ == "__main__":
-    train, val, test = load_train_val_test(tier=DataTier.SAMPLE)
+    train, val, test = load_train_val_test(tier=DataTier.FULL)
     print(f"Train shape: {train.shape} | Val shape: {val.shape} | Test shape: {test.shape}")

@@ -1,10 +1,10 @@
 {
-  "run_id": "73bdb032",
-  "model_name": "XGBoost",
-  "val_rmse": 0.4416747833589832,
-  "train_rmse": 0.3315618437799816,
-  "overfitting_gap": 0.11011293957900159,
-  "selection_score": 0.496731253148484,
-  "timestamp": "2026-07-05 00:01:20+03:00",
-  "selected_at": "2026-07-09 04:10:25"
+  "run_id": "d399dc13",
+  "model_name": "Neural Network",
+  "val_rmse": 0.4348178144788167,
+  "train_rmse": 0.3231740701682297,
+  "overfitting_gap": 0.11164374431058699,
+  "selection_score": 0.4906396866341102,
+  "timestamp": "2026-07-09 17:25:04+03:00",
+  "selected_at": "2026-07-09 17:26:18"
 }

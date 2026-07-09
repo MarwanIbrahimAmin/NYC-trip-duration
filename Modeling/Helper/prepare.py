@@ -17,7 +17,7 @@ from Enum.path_enums import DataTier
 
 
 class Preparing():
-    def __init__(self, tier: DataTier = DataTier.SAMPLE):
+    def __init__(self, tier: DataTier = DataTier.FULL):
         self.train, self.val, self.test = load_train_val_test(tier)
         self.preprocessor = Preprocessing_Pipeline()
 
